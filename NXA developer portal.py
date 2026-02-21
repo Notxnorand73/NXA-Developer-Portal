@@ -38,15 +38,15 @@ while True:
     print("|| 3. Exit")
     print(header)
     option = input("|| Enter your choice: ")
-    if option == "1":
+    if option == "1" or option.lower() == "nxa developer console":
         print("Opening NXA Developer Console...")
         console()
         clear_screen()
-    elif option == "2":
+    elif option == "2" or option.lower() == "nxa github repository":
         print("Opening NXA GitHub Repository...")
         webbrowser.open("https://github.com/Notxnorand73/NXA-Developer-Portal")
         clear_screen()
-    elif option == "3":
+    elif option == "3" or option.lower() == "exit":
         print("Exiting...")
         clear_screen()
         quit()
