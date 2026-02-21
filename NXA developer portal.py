@@ -1,6 +1,6 @@
 import os
 import webbrowser
-import nxaconsole
+from nxaconsole import console
 
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -44,7 +44,7 @@ while True:
     option = input("|| Enter your choice: ")
     if option == "1":
         print("Opening NXA Developer Console...")
-        nxaconsole.start_console()
+        console()
     elif option == "2":
         print("Opening NXA GitHub Repository...")
         webbrowser.open("https://github.com/Notxnorand73/NXA-Developer-Portal")
