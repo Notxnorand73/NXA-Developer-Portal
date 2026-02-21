@@ -73,6 +73,40 @@ def preview_file(filedata):
         # Default
         else:
             print(line)
+        
+def read_file(filename):
+    if not filename.endswith(".nxa"):
+        filename += ".nxa"
+    if filename in files:
+        print(f"Contents of '{filename}':")
+        preview_file(files[filename])
+    else:
+        print(f"File '{filename}' does not exist.")
+
+def delete_file(filename):
+    if not filename.endswith(".nxa"):
+        filename += ".nxa"
+    if filename in files:
+        del files[filename]
+        save()
+        print(f"File '{filename}' deleted successfully.")
+    else:
+        print(f"File '{filename}' does not exist.")
+
+def write_file(filename, content):
+    if not filename.endswith(".nxa"):
+        filename += ".nxa"
+    files[filename] = content
+    save()
+    print(f"Content written to '{filename}' successfully.")
+
+def list_files():
+    if files:
+        print("NXA Files:")
+        for filename in files:
+            print(f"- {filename}")
+    else:
+        print("No .nxa files found.")
 
 def retrieve(part):
     try:
@@ -101,12 +135,11 @@ def retrieve(part):
                 return f"You have {LOCAL_VERSION}. A new version {remote} is available!"
         elif part == "Publisher":
             return f"Publisher: {remote}"
-        elif part == "Releases":
-            pass
     except Exception as e:
-        return f"You have {LOCAL_VERSION}. (Couldn't check for updates: {e})"
+        return "You are offline or there was an error retrieving the data."
 
 def console():
+    load()
     while True:
         command = input("NXA Console> ")
         if command.lower() == "exit":
@@ -144,8 +177,28 @@ def console():
         elif command.lower().startswith("open "):
             url = command[5:]
             os.system(f"start {url}" if os.name == 'nt' else f"xdg-open {url}")
+        elif command.lower().startswith("mkf "):
+            filename = command[4:]
+            make_file(filename)
+        elif command.lower().startswith("read "):
+            filename = command[5:]
+            read_file(filename)
+        elif command.lower().startswith("delete "):
+            filename = command[7:]
+            delete_file(filename)
+        elif command.lower().startswith("write "):
+            parts = command.split(" ", 2)
+            if len(parts) < 3:
+                print("Usage: write [filename] [content]")
+            else:
+                filename = parts[1]
+                content = parts[2]
+                write_file(filename, content)
+        elif command.lower() == "list":
+            list_files()
         else:
             print(f"Unknown command: {command}. Type 'help' for a list of commands.")
+        save()
 
 
 if __name__ == "__main__":
