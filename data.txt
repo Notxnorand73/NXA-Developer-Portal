@@ -1,4 +1,4 @@
 Version: Beta 1.0.0
 Publisher: Notxnorand
 Releases:
-1 Alpha 1.0.0
+1. Alpha 1.0.0
