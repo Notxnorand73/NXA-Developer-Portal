@@ -1,9 +1,78 @@
 import os
+import json
 import webbrowser
 import requests
 from bs4 import BeautifulSoup
 
+files = {}
+
+try:
+    with open("files.json", "r") as f:
+        files = json.load(f)
+except FileNotFoundError:
+    files = {}
+
 LOCAL_VERSION = "Beta 1.0.0"
+
+def load():
+    global files
+    try:
+        with open("files.json", "r") as f:
+            files = json.load(f)
+    except FileNotFoundError:
+        files = {}
+def save():
+    with open("files.json", "w") as f:
+        json.dump(files, f, indent=4)
+
+def make_file(filename):
+    if not filename.endswith(".nxa"):
+        filename += ".nxa"
+    if filename in files:
+        print(f"File '{filename}' already exists.")
+    else:
+        files[filename] = ""
+        save()
+        print(f"File '{filename}' created successfully.")
+
+def preview_file(filedata):
+    content = filedata.split("\n")
+    for line in content:
+        # Breaks
+        if line.startswith("break "):
+            print("-" * int(line[6:]))
+        elif line.startswith("dbreak "):
+            print("=" * int(line[7:]))
+        elif line.startswith("hbreak "):
+            print("#" * int(line[7:]))
+        elif line.startswith("lbreak "):
+            print("~" * int(line[7:]))
+        elif line.startswith("sbreak "):
+            print("*" * int(line[7:]))
+        # Lists
+        elif line.startswith("list: "):
+            items = line[6:].split(",")
+            for item in items:
+                print(f"- {item.strip()}")
+        elif line.startswith("nlist: "):
+            items = line[7:].split(",")
+            for i, item in enumerate(items, start=1):
+                print(f"{i}. {item.strip()}")
+        elif line.startswith("tlist: "):
+            items = line[7:].split(",")
+            for i, item in enumerate(items, start=1):
+                print(f"{i}) {item.strip()}")
+        elif line.startswith("dlist: "):
+            items = line[7:].split(",")
+            for i, item in enumerate(items, start=1):
+                print(f"{i}. {item.strip()}")
+        elif line.startswith("ulist: "):
+            items = line[7:].split(",")
+            for item in items:
+                print(f"* {item.strip()}")
+        # Default
+        else:
+            print(line)
 
 def retrieve(part):
     try:
@@ -54,6 +123,11 @@ def console():
             print(" - about: Show information about the console")
             print(" - echo [message]: Echo the message back to the console")
             print(" - open [url]: Open the url in the default web browser")
+            print(" - mkf [filename]: Create an empty .nxa file with the given name")
+            print(" - read [filename]: Read and display the contents of a .nxa file")
+            print(" - delete [filename]: Delete a .nxa file")
+            print(" - write [filename] [content]: Write content to a .nxa file")
+            print(" - list: List all .nxa files in the current directory")
         elif command.lower() == "clear":
             os.system('cls' if os.name == 'nt' else 'clear')
         elif command.lower() == "version":
