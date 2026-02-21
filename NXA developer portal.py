@@ -24,10 +24,6 @@ while not isLoggedIn:
 
     if len(username) == 0 or len(password) == 0:
         print("Username and password cannot be empty")
-    elif username == "admin" and password == "admin":
-        clear_screen()
-        print("Admin login successful")
-        isLoggedIn = True
     else:
         clear_screen()
         print("Login successful")
@@ -45,11 +41,14 @@ while True:
     if option == "1":
         print("Opening NXA Developer Console...")
         console()
+        clear_screen()
     elif option == "2":
         print("Opening NXA GitHub Repository...")
         webbrowser.open("https://github.com/Notxnorand73/NXA-Developer-Portal")
+        clear_screen()
     elif option == "3":
         print("Exiting...")
+        clear_screen()
         quit()
     else:
         print("Invalid option. Please try again.")
